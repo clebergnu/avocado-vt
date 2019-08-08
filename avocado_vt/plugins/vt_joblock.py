@@ -39,7 +39,7 @@ class VTJobLock(Pre, Post):
     name = 'vt-joblock'
     description = 'Avocado-VT Job Lock/Unlock'
 
-    def __init__(self, **kwargs):
+    def __init__(self, config=None):
         self.log = logging.getLogger("avocado.app")
         self.lock_dir = os.path.expanduser(settings.get_value(
             section="plugins.vtjoblock",
