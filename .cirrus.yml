@@ -11,11 +11,11 @@ fedora_30_task:
     - $PYTHON -m pip install $AVOCADO_SRC
     - $PYTHON -m pip install -r requirements.txt
     - $PYTHON setup.py develop --user
-  bootstrap_script:
+  bootstrap_script: &bootstrap_scr
     - $PYTHON -m avocado vt-bootstrap --vt-skip-verify-download-assets --yes-to-all
-  list_script:
+  list_script: &list_scr
     - $PYTHON -m avocado list
-  dry_run_script:
+  dry_run_script: &dry_run_scr
     - $PYTHON -m avocado --show all run --dry-run -- boot
   env:
     matrix:
@@ -31,8 +31,8 @@ centos_7_task:
   setup_script:
     *setup_scr
   bootstrap_script:
-    - $PYTHON -m avocado vt-bootstrap --vt-skip-verify-download-assets --yes-to-all
+    *bootstrap_scr
   list_script:
-    - $PYTHON -m avocado list
+    *list_scr
   dry_run_script:
-    - $PYTHON -m avocado --show all run --dry-run -- boot
+    *dry_run_scr
