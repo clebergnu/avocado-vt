@@ -28,7 +28,7 @@ centos_7_task:
     AVOCADO_SRC: avocado-framework<70.0
   container:
     image: quay.io/avocado-framework/avocado-vt-ci-centos-7
-  *setup
+  *setup:
   bootstrap_script:
     - $PYTHON -m avocado vt-bootstrap --vt-skip-verify-download-assets --yes-to-all
   list_script:
