@@ -31,7 +31,6 @@ rhel_8_task:
     PYTHON: python3
     matrix:
       - AVOCADO_SRC: avocado-framework<70.0
-      - AVOCADO_SRC: avocado-framework
       # When installing from source, pip tries to install at
       # /usr/local/lib/python3.6/site-packages/ and fails with:
       # [Errno 2] No such file or directory: '/usr/local/lib/python3.6/site-packages/test-easy-install-78.write-test'
