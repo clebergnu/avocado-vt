@@ -6,6 +6,10 @@ fedora_30_task:
     PYTHON: python3
   container:
     image: quay.io/avocado-framework/avocado-vt-ci-fedora-30
+  env:
+    matrix:
+      - AVOCADO_SRC: avocado-framework<70.0
+      - AVOCADO_SRC: -e git+https://github.com/avocado-framework/avocado#egg=avocado_framework
   setup_script: &setup_scr
     - $PYTHON --version
     - $PYTHON -m pip install $AVOCADO_SRC
@@ -17,10 +21,6 @@ fedora_30_task:
     - $PYTHON -m avocado list
   dry_run_script: &dry_run_scr
     - $PYTHON -m avocado --show all run --dry-run -- boot
-  env:
-    matrix:
-      - AVOCADO_SRC: avocado-framework<70.0
-      - AVOCADO_SRC: -e git+https://github.com/avocado-framework/avocado#egg=avocado_framework
 
 centos_7_task:
   env:
