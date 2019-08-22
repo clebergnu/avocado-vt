@@ -32,17 +32,18 @@ rhel_8_task:
     matrix:
       - AVOCADO_SRC: avocado-framework<70.0
       - AVOCADO_SRC: avocado-framework
-      # When installing from source, pip tries to install
-      # at /usr/local/lib/python3.6/site-packages/
-      # and fails with:
+      # When installing from source, pip tries to install at
+      # /usr/local/lib/python3.6/site-packages/ and fails with:
       # [Errno 2] No such file or directory: '/usr/local/lib/python3.6/site-packages/test-easy-install-78.write-test'
-      # workaround is: --prefix /
+      # workaround is to add "--prefix /"
       - AVOCADO_SRC: --prefix / -e git+https://github.com/avocado-framework/avocado#egg=avocado_framework
     matrix:
       - SETUP: setup.py develop --user
       - SETUP: -m pip install .
   setup_script:
     *setup_scr
+  plugin_script:
+    - $PYTHON -m avocado plugins 2>/dev/null | grep vt-bootstrap
 
 centos_7_task:
   env:
