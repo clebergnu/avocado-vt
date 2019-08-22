@@ -29,7 +29,7 @@ centos_7_task:
   container:
     image: quay.io/avocado-framework/avocado-vt-ci-centos-7
   setup_script:
-    <<: *setup_scr
+    *setup_scr
   bootstrap_script:
     - $PYTHON -m avocado vt-bootstrap --vt-skip-verify-download-assets --yes-to-all
   list_script:
