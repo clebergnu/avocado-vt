@@ -2,11 +2,10 @@ env:
   CIRRUS_CLONE_DEPTH: 1
 
 fedora_30_task:
-  env:
-    PYTHON: python3
   container:
     image: quay.io/avocado-framework/avocado-vt-ci-fedora-30
   env:
+    PYTHON: python3
     matrix:
       - AVOCADO_SRC: avocado-framework<70.0
       - AVOCADO_SRC: -e git+https://github.com/avocado-framework/avocado#egg=avocado_framework
