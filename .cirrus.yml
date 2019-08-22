@@ -6,8 +6,8 @@ fedora_30_task:
     PYTHON: python3
   container:
     image: quay.io/avocado-framework/avocado-vt-ci-fedora-30
-  setup_script:
-    - &pyversion $PYTHON --version
+  &setup setup_script:
+    - $PYTHON --version
     - $PYTHON -m pip install $AVOCADO_SRC
     - $PYTHON -m pip install -r requirements.txt
     - $PYTHON setup.py develop --user
@@ -28,11 +28,7 @@ centos_7_task:
     AVOCADO_SRC: avocado-framework<70.0
   container:
     image: quay.io/avocado-framework/avocado-vt-ci-centos-7
-  setup_script:
-    - *pyversion
-    - $PYTHON -m pip install $AVOCADO_SRC
-    - $PYTHON -m pip install -r requirements.txt
-    - $PYTHON setup.py develop --user
+  *setup
   bootstrap_script:
     - $PYTHON -m avocado vt-bootstrap --vt-skip-verify-download-assets --yes-to-all
   list_script:
