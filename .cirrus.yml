@@ -128,19 +128,15 @@ centos_7_pip_install_virtualenv_task:
     - $PYTHON --version
     - $PYTHON -m pip install virtualenv
     - $PYTHON -m virtualenv /tmp/virtualenv
-    - . /tmp/virtualenv/bin/activate
-    - $PYTHON -m pip install $AVOCADO_SRC
-    - $PYTHON -m pip install -r requirements.txt
-    - $PYTHON -m pip install .
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m pip install $AVOCADO_SRC
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m pip install -r requirements.txt
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m pip install .
   bootstrap_script:
-    - . /tmp/virtualenv/bin/activate
-    - $PYTHON -m avocado vt-bootstrap --vt-skip-verify-download-assets --yes-to-all
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m avocado vt-bootstrap --vt-skip-verify-download-assets --yes-to-all
   list_script:
-    - . /tmp/virtualenv/bin/activate
-    - $PYTHON -m avocado list
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m avocado list
   dry_run_script:
-    - . /tmp/virtualenv/bin/activate
-    - $PYTHON -m avocado --show all run --dry-run -- boot
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m avocado --show all run --dry-run -- boot
 
 centos_7_pip_install_prefix_virtualenv_task:
   env:
@@ -152,16 +148,12 @@ centos_7_pip_install_prefix_virtualenv_task:
     - $PYTHON --version
     - $PYTHON -m pip install virtualenv
     - $PYTHON -m virtualenv /tmp/virtualenv
-    - . /tmp/virtualenv/bin/activate
-    - $PYTHON -m pip install $AVOCADO_SRC
-    - $PYTHON -m pip install -r requirements.txt
-    - $PYTHON -m pip install --prefix / .
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m pip install $AVOCADO_SRC
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m pip install -r requirements.txt
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m pip install --prefix / .
   bootstrap_script:
-    - . /tmp/virtualenv/bin/activate
-    - $PYTHON -m avocado vt-bootstrap --vt-skip-verify-download-assets --yes-to-all
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m avocado vt-bootstrap --vt-skip-verify-download-assets --yes-to-all
   list_script:
-    - . /tmp/virtualenv/bin/activate
-    - $PYTHON -m avocado list
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m avocado list
   dry_run_script:
-    - . /tmp/virtualenv/bin/activate
-    - $PYTHON -m avocado --show all run --dry-run -- boot
+    - . /tmp/virtualenv/bin/activate && /tmp/virtualenv/bin/$PYTHON -m avocado --show all run --dry-run -- boot
