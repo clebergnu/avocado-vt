@@ -7,7 +7,7 @@ fedora_30_task:
   container:
     image: quay.io/avocado-framework/avocado-vt-ci-fedora-30
   setup_script:
-    - $PYTHON --version
+    - &pyversion $PYTHON --version
     - $PYTHON -m pip install $AVOCADO_SRC
     - $PYTHON -m pip install -r requirements.txt
     - $PYTHON setup.py develop --user
@@ -29,7 +29,7 @@ centos_7_task:
   container:
     image: quay.io/avocado-framework/avocado-vt-ci-centos-7
   setup_script:
-    - $PYTHON --version
+    - *pyversion
     - $PYTHON -m pip install $AVOCADO_SRC
     - $PYTHON -m pip install -r requirements.txt
     - $PYTHON setup.py develop --user
