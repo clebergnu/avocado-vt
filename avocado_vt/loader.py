@@ -118,7 +118,6 @@ class VirtTestLoader(loader.TestLoader):
         # contain an "args" attribute instead
         else:
             self.config = self.args
-        self._fill_optional_config()
         if vt_extra_params:
             # We don't want to override the original config
             self.config = copy.deepcopy(self.config)
@@ -128,39 +127,6 @@ class VirtTestLoader(loader.TestLoader):
             else:
                 extra = vt_extra_params
             set_opt(self.config, 'vt_extra_params', extra)
-
-    def _fill_optional_config(self):
-        def _add_if_not_exist(key, value):
-            if not get_opt(self.config, key):
-                set_opt(self.config, key, value)
-        _add_if_not_exist('vt_config', None)
-        _add_if_not_exist('vt_verbose', True)
-        _add_if_not_exist('vt_log_level', 'debug')
-        _add_if_not_exist('vt_console_level', 'debug')
-        _add_if_not_exist('vt_common_datadir', data_dir.get_data_dir())
-        _add_if_not_exist('vt_common_tmp_dir', '')
-        _add_if_not_exist('vt_config', None)
-        _add_if_not_exist('vt_arch', None)
-        _add_if_not_exist('vt_machine_type', None)
-        _add_if_not_exist('vt_setup_keep_guest_running', False)
-        _add_if_not_exist('vt_setup_backup_image_before_test', True)
-        _add_if_not_exist('vt_setup_restore_image_after_test', True)
-        _add_if_not_exist('vt_common_mem', 1024)
-        _add_if_not_exist('vt_no_filter', '')
-        _add_if_not_exist('vt_qemu_bin', None)
-        _add_if_not_exist('vt_dst_qemu_bin', None)
-        _add_if_not_exist('vt_common_nettype', 'user')
-        _add_if_not_exist('vt_only_type_specific', False)
-        _add_if_not_exist('vt_connect_uri', 'qemu:///system')
-        _add_if_not_exist('vt_qemu_accel', 'kvm')
-        _add_if_not_exist('vt_qemu_monitor', 'human')
-        _add_if_not_exist('vt_qemu_smp', 1)
-        _add_if_not_exist('vt_qemu_image_type', 'qcow2')
-        _add_if_not_exist('vt_qemu_nic_model', 'virtio_net')
-        _add_if_not_exist('vt_qemu_disk_bus', 'virtio_blk')
-        _add_if_not_exist('vt_vhost', 'off')
-        _add_if_not_exist('vt_qemu_malloc_perturb', 'yes')
-        _add_if_not_exist('vt_qemu_sandbox', 'on')
 
     def _get_parser(self):
         options_processor = VirtTestOptionsProcess(self.config)
