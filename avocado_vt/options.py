@@ -206,8 +206,12 @@ class VirtTestOptionsProcess(object):
             else:
                 try:
                     self.cartesian_parser.only_filter("up")
+                    # REMOVE ME: should be done at registering
+                    smp = get_opt(self.options, 'vt_qemu_smp')
+                    if smp is None:
+                        smp = '2'
                     self.cartesian_parser.assign(
-                        "smp", int(get_opt(self.options, 'vt_qemu_smp')))
+                        "smp", int(smp))
                 except ValueError:
                     raise ValueError("Invalid %s '%s'. Valid value: (1, 2, "
                                      "or integer)" % get_opt(self.options, 'vt_qemu_smp'))
@@ -267,12 +271,15 @@ class VirtTestOptionsProcess(object):
     def _process_disk_buses(self):
         disk_bus_setting = 'config vt.qemu.disk_bus'
         if not get_opt(self.options, 'vt_config'):
-            if get_opt(self.options, 'vt_qemu_disk_bus') in SUPPORTED_DISK_BUSES:
-                self.cartesian_parser.only_filter(get_opt(self.options, 'vt_qemu_disk_bus'))
+            disk_bus = get_opt(self.options, 'vt_qemu_disk_bus')
+            if disk_bus is None:
+                disk_bus = 'virtio_blk'
+            if disk_bus in SUPPORTED_DISK_BUSES:
+                self.cartesian_parser.only_filter(disk_bus)
             else:
                 raise ValueError("Invalid %s '%s'. Valid values: %s" %
                                  (disk_bus_setting,
-                                  get_opt(self.options, 'vt_qemu_disk_bus'),
+                                  disk_bus,
                                   SUPPORTED_DISK_BUSES))
         else:
             logging.info("Config provided, ignoring %s", disk_bus_setting)

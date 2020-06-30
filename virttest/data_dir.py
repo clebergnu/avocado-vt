@@ -213,6 +213,10 @@ def get_tmp_dir(public=True):
     """
     persistent_dir = get_settings_value('vt.common', 'tmp_dir',
                                         default="")
+    # REMOVEME: this should be set at option registration time, that is
+    # settings.register_option('vt.common', 'tmp_dir', default='')
+    if persistent_dir is None:
+        persistent_dir = ""
     if persistent_dir != "":
         return persistent_dir
     tmp_dir = None

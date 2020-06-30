@@ -61,6 +61,9 @@ def add_basic_vt_options(parser):
                         "Default: %(default)s", default=arch)
     machine = get_settings_value('vt.common', 'machine_type',
                                  default=defaults.DEFAULT_MACHINE_TYPE)
+    # REMOVE ME: should be done at option registration time
+    if machine is None:
+        machine = defaults.DEFAULT_MACHINE_TYPE
     parser.add_argument("--vt-machine-type", help="Choose the VM machine type."
                         " Default: %(default)s", default=machine)
     parser.add_argument("--vt-guest-os", action="store",

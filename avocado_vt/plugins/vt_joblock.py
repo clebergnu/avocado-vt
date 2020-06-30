@@ -45,6 +45,11 @@ class VTJobLock(Pre, Post):
         self.log = logging.getLogger("avocado.app")
         lock_dir = get_settings_value("plugins.vtjoblock", "dir",
                                       key_type=str, default='/tmp')
+
+        # REMOVE ME: this default be set at option registration time
+        if lock_dir is None:
+           lock_dir = '/tmp'
+
         self.lock_dir = os.path.expanduser(lock_dir)
         self.lock_file = None
 
