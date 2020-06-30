@@ -20,6 +20,30 @@ def is_registering_settings_required():
             hasattr(settings, 'as_json'))
 
 
+def namespace_to_section_key(namespace, section_size=1):
+    """Converts an namespace into a section and key pair.
+
+    A namespace in the new Avocado settings module consists of a dot
+    separated components words, of which some may be mapped to a
+    configuration file section, and some to a configuration file
+    key under such a section.  For example:
+
+    [major.minor]
+    key = value
+
+    Would be mapped to a "major.minor.key" namespace.  In the
+    configuration dictionary, a user would look for "major.minor.key".
+    Because we need to revert the process, and obtain the section name
+    and key name from the namespace, it's necessary to give the
+    size of components for the section, and the key is assumed to be
+    the rest.
+    """
+    components = namespace.split('.', section_size)
+    key = components.pop()
+    section = '.'.join(components)
+    return section, key
+
+
 if is_registering_settings_required():
     def get_opt(opt, name):
         """
@@ -40,6 +64,10 @@ if is_registering_settings_required():
         :param value: the value to be set
         """
         opt[name] = value
+
+    def set_opt_from_settings(opt, namespace, section_size=1, **kwargs):
+        """No-op, default values are set at settings.register_option()."""
+        pass
 else:
     def get_opt(opt, name):
         if isinstance(opt, argparse.Namespace):
@@ -53,3 +81,10 @@ else:
             setattr(opt, name, value)
         else:
             opt[name] = value
+
+
+    def set_opt_from_settings(opt, namespace, section_size=1, **kwargs):
+        """Sets option default value from the configuration file."""
+        section, key = namespace_to_section_key(namespace, section_size)
+        value = settings.get_value(section, key, **kwargs)
+        set_opt(opt, namespace, value)

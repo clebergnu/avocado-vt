@@ -27,7 +27,7 @@ from virttest import cartesian_config
 from virttest import data_dir
 from virttest import defaults
 from virttest import standalone_test
-from virttest.compat import get_opt, set_opt
+from virttest.compat import get_opt, set_opt, set_opt_from_settings
 from virttest.standalone_test import SUPPORTED_DISK_BUSES
 from virttest.standalone_test import SUPPORTED_IMAGE_TYPES
 from virttest.standalone_test import SUPPORTED_LIBVIRT_DRIVERS
@@ -61,58 +61,50 @@ class VirtTestOptionsProcess(object):
         # Doing this makes things configurable yet the number of options
         # is not overwhelming.
         # setup section
-        set_opt(self.options, 'vt_setup_backup_image_before_test',
-                settings.get_value('vt.setup', 'backup_image_before_test',
-                                   key_type=bool, default=True))
-        set_opt(self.options, 'vt_setup_restore_image_after_test',
-                settings.get_value('vt.setup', 'restore_image_after_test',
-                                   key_type=bool, default=True))
-        set_opt(self.options, 'vt_setup_keep_guest_running',
-                settings.get_value('vt.setup', 'keep_guest_running',
-                                   key_type=bool, default=False))
+        set_opt_from_settings(self.options, 'vt_setup_backup_image_before_test',
+                              2, key_type=bool, default=True)
+        set_opt_from_settings(self.options, 'vt_setup_restore_image_after_test',
+                              2, key_type=bool, default=True)
+        set_opt_from_settings(self.options, 'vt_setup_keep_guest_running',
+                              2, key_type=bool, default=False)
         # common section
-        set_opt(self.options, 'vt_common_data_dir',
-                settings.get_value('vt.common', 'data_dir', default=None))
-        set_opt(self.options, 'vt_common_tmp_dir',
-                settings.get_value('vt.common', 'tmp_dir', default=''))
-        set_opt(self.options, 'vt_common_type_specific',
-                settings.get_value('vt.common', 'type_specific_only',
-                                   key_type=bool, default=False))
-        set_opt(self.options, 'vt_common_mem',
-                settings.get_value('vt.common', 'mem', key_type=int,
-                                   default=None))
-        set_opt(self.options, 'vt_common_nettype',
-                settings.get_value('vt.common', 'nettype', default=None))
-        set_opt(self.options, 'vt_common_netdst',
-                settings.get_value('vt.common', 'netdst', default='virbr0'))
+        set_opt_from_settings(self.options, 'vt_common_data_dir',
+                              2, default=None)
+        set_opt_from_settings(self.options, 'vt_common_tmp_dir',
+                              2, default='')
+        set_opt_from_settings(self.options, 'vt_common_type_specific',
+                              2, key_type=bool, default=False)
+        set_opt_from_settings(self.options, 'vt_common_mem',
+                              2, default=None)
+        set_opt_from_settings(self.options, 'vt_common_nettype',
+                              2, default=None)
+        set_opt_from_settings(self.options, 'vt_common_netdst',
+                              2, default='virbr0')
         # qemu section
-        set_opt(self.options, 'vt_qemu_accel',
-                settings.get_value('vt.qemu', 'accel', default='kvm'))
-        set_opt(self.options, 'vt_qemu_vhost',
-                settings.get_value('vt.qemu', 'vhost', default='off'))
-        set_opt(self.options, 'vt_qemu_monitor',
-                settings.get_value('vt.qemu', 'monitor', default=None))
-        set_opt(self.options, 'vt_qemu_smp',
-                settings.get_value('vt.qemu', 'smp', default='2'))
-        set_opt(self.options, 'vt_qemu_image_type',
-                settings.get_value('vt.qemu', 'image_type', default='qcow2'))
-        set_opt(self.options, 'vt_qemu_nic_model',
-                settings.get_value('vt.qemu', 'nic_model',
-                                   default='virtio_net'))
-        set_opt(self.options, 'vt_qemu_disk_bus',
-                settings.get_value('vt.qemu', 'disk_bus',
-                                   default='virtio_blk'))
-        set_opt(self.options, 'vt_qemu_sandbox',
-                settings.get_value('vt.qemu', 'sandbox', default='on'))
-        set_opt(self.options, 'vt_qemu_defconfig',
-                settings.get_value('vt.qemu', 'defconfig', default='yes'))
-        set_opt(self.options, 'vt_qemu_malloc_perturb',
-                settings.get_value('vt.qemu', 'malloc_perturb', default='yes'))
+        set_opt_from_settings(self.options, 'vt_qemu_accel',
+                              2, default='kvm')
+        set_opt_from_settings(self.options, 'vt_qemu_vhost',
+                              2, default='off')
+        set_opt_from_settings(self.options, 'vt_qemu_monitor',
+                              2, default=None)
+        set_opt_from_settings(self.options, 'vt_qemu_smp',
+                              2, default='2')
+        set_opt_from_settings(self.options, 'vt_qemu_image_type',
+                              2, default='qcow2')
+        set_opt_from_settings(self.options, 'vt_qemu_nic_model',
+                              2, default='virtio_net')
+        set_opt_from_settings(self.options, 'vt_qemu_disk_bus',
+                              2, default='virtio_blk')
+        set_opt_from_settings(self.options, 'vt_qemu_sandbox',
+                              2, default='on')
+        set_opt_from_settings(self.options, 'vt_qemu_defconfig',
+                              2, default='yes')
+        set_opt_from_settings(self.options, 'vt_qemu_malloc_perturb',
+                              2, default='yes')
 
         # debug section
-        set_opt(self.options, 'vt_debug_no_cleanup',
-                settings.get_value('vt.debug', 'no_cleanup',
-                                   key_type=bool, default=False))
+        set_opt_from_settings(self.options, 'vt_debug_no_cleanup',
+                              2, key_type=bool, default=False)
 
         self.cartesian_parser = None
 
