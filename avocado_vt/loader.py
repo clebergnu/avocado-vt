@@ -151,7 +151,6 @@ class VirtTestLoader(loader.TestLoader):
         _add_if_not_exist('vt_dst_qemu_bin', None)
         _add_if_not_exist('vt_common_nettype', 'user')
         _add_if_not_exist('vt_only_type_specific', False)
-        _add_if_not_exist('vt_tests', '')
         _add_if_not_exist('vt_connect_uri', 'qemu:///system')
         _add_if_not_exist('vt_qemu_accel', 'kvm')
         _add_if_not_exist('vt_qemu_monitor', 'human')
@@ -162,9 +161,6 @@ class VirtTestLoader(loader.TestLoader):
         _add_if_not_exist('vt_vhost', 'off')
         _add_if_not_exist('vt_qemu_malloc_perturb', 'yes')
         _add_if_not_exist('vt_qemu_sandbox', 'on')
-        _add_if_not_exist('vt_tests', '')
-        _add_if_not_exist('show_job_log', False)
-        _add_if_not_exist('test_lister', True)
 
     def _get_parser(self):
         options_processor = VirtTestOptionsProcess(self.config)
