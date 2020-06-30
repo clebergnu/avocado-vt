@@ -61,56 +61,56 @@ class VirtTestOptionsProcess(object):
         # Doing this makes things configurable yet the number of options
         # is not overwhelming.
         # setup section
-        set_opt(self.options, 'vt_backup_image_before_test',
+        set_opt(self.options, 'vt_setup_backup_image_before_test',
                 settings.get_value('vt.setup', 'backup_image_before_test',
                                    key_type=bool, default=True))
-        set_opt(self.options, 'vt_restore_image_after_test',
+        set_opt(self.options, 'vt_setup_restore_image_after_test',
                 settings.get_value('vt.setup', 'restore_image_after_test',
                                    key_type=bool, default=True))
-        set_opt(self.options, 'vt_keep_guest_running',
+        set_opt(self.options, 'vt_setup_keep_guest_running',
                 settings.get_value('vt.setup', 'keep_guest_running',
                                    key_type=bool, default=False))
         # common section
-        set_opt(self.options, 'vt_data_dir',
+        set_opt(self.options, 'vt_common_data_dir',
                 settings.get_value('vt.common', 'data_dir', default=None))
-        set_opt(self.options, 'vt_tmp_dir',
+        set_opt(self.options, 'vt_common_tmp_dir',
                 settings.get_value('vt.common', 'tmp_dir', default=''))
-        set_opt(self.options, 'vt_type_specific',
+        set_opt(self.options, 'vt_common_type_specific',
                 settings.get_value('vt.common', 'type_specific_only',
                                    key_type=bool, default=False))
-        set_opt(self.options, 'vt_mem',
+        set_opt(self.options, 'vt_common_mem',
                 settings.get_value('vt.common', 'mem', key_type=int,
                                    default=None))
-        set_opt(self.options, 'vt_nettype',
+        set_opt(self.options, 'vt_common_nettype',
                 settings.get_value('vt.common', 'nettype', default=None))
-        set_opt(self.options, 'vt_netdst',
+        set_opt(self.options, 'vt_common_netdst',
                 settings.get_value('vt.common', 'netdst', default='virbr0'))
         # qemu section
-        set_opt(self.options, 'vt_accel',
+        set_opt(self.options, 'vt_qemu_accel',
                 settings.get_value('vt.qemu', 'accel', default='kvm'))
-        set_opt(self.options, 'vt_vhost',
+        set_opt(self.options, 'vt_qemu_vhost',
                 settings.get_value('vt.qemu', 'vhost', default='off'))
-        set_opt(self.options, 'vt_monitor',
+        set_opt(self.options, 'vt_qemu_monitor',
                 settings.get_value('vt.qemu', 'monitor', default=None))
-        set_opt(self.options, 'vt_smp',
+        set_opt(self.options, 'vt_qemu_smp',
                 settings.get_value('vt.qemu', 'smp', default='2'))
-        set_opt(self.options, 'vt_image_type',
+        set_opt(self.options, 'vt_qemu_image_type',
                 settings.get_value('vt.qemu', 'image_type', default='qcow2'))
-        set_opt(self.options, 'vt_nic_model',
+        set_opt(self.options, 'vt_qemu_nic_model',
                 settings.get_value('vt.qemu', 'nic_model',
                                    default='virtio_net'))
-        set_opt(self.options, 'vt_disk_bus',
+        set_opt(self.options, 'vt_qemu_disk_bus',
                 settings.get_value('vt.qemu', 'disk_bus',
                                    default='virtio_blk'))
         set_opt(self.options, 'vt_qemu_sandbox',
                 settings.get_value('vt.qemu', 'sandbox', default='on'))
         set_opt(self.options, 'vt_qemu_defconfig',
                 settings.get_value('vt.qemu', 'defconfig', default='yes'))
-        set_opt(self.options, 'vt_malloc_perturb',
+        set_opt(self.options, 'vt_qemu_malloc_perturb',
                 settings.get_value('vt.qemu', 'malloc_perturb', default='yes'))
 
         # debug section
-        set_opt(self.options, 'vt_no_cleanup',
+        set_opt(self.options, 'vt_debug_no_cleanup',
                 settings.get_value('vt.debug', 'no_cleanup',
                                    key_type=bool, default=False))
 
@@ -159,47 +159,47 @@ class VirtTestOptionsProcess(object):
         """
         Puts the value of the qemu bin option in the cartesian parser command.
         """
-        if get_opt(self.options, 'vt_accel') == 'tcg':
+        if get_opt(self.options, 'vt_qemu_accel') == 'tcg':
             self.cartesian_parser.assign("disable_kvm", "yes")
 
     def _process_bridge_mode(self):
         nettype_setting = 'config vt.qemu.nettype'
         if not get_opt(self.options, 'vt_config'):
             # Let's select reasonable defaults depending on vt_type
-            if not get_opt(self.options, 'vt_nettype'):
+            if not get_opt(self.options, 'vt_common_nettype'):
                 if get_opt(self.options, 'vt_type') == 'qemu':
-                    set_opt(self.options, 'vt_nettype',
+                    set_opt(self.options, 'vt_common_nettype',
                             ("bridge" if os.getuid() == 0 else "user"))
                 elif get_opt(self.options, 'vt_type') == 'spice':
-                    set_opt(self.options, 'vt_nettype', "none")
+                    set_opt(self.options, 'vt_common_nettype', "none")
                 else:
-                    set_opt(self.options, 'vt_nettype', "bridge")
+                    set_opt(self.options, 'vt_common_nettype', "bridge")
 
-            if get_opt(self.options, 'vt_nettype') not in SUPPORTED_NET_TYPES:
+            if get_opt(self.options, 'vt_common_nettype') not in SUPPORTED_NET_TYPES:
                 raise ValueError("Invalid %s '%s'. "
                                  "Valid values: (%s)" %
                                  (nettype_setting,
-                                  get_opt(self.options, 'vt_nettype'),
+                                  get_opt(self.options, 'vt_common_nettype'),
                                   ", ".join(SUPPORTED_NET_TYPES)))
-            if get_opt(self.options, 'vt_nettype') == 'bridge':
+            if get_opt(self.options, 'vt_common_nettype') == 'bridge':
                 if os.getuid() != 0:
                     raise ValueError("In order to use %s '%s' you "
                                      "need to be root" % (nettype_setting,
-                                                          get_opt(self.options, 'vt_nettype')))
+                                                          get_opt(self.options, 'vt_common_nettype')))
                 self.cartesian_parser.assign("nettype", "bridge")
                 self.cartesian_parser.assign("netdst", get_opt(self.options, 'vt_netdst'))
-            elif get_opt(self.options, 'vt_nettype') == 'user':
+            elif get_opt(self.options, 'vt_common_nettype') == 'user':
                 self.cartesian_parser.assign("nettype", "user")
         else:
             logging.info("Config provided, ignoring %s", nettype_setting)
 
     def _process_monitor(self):
         if not get_opt(self.options, 'vt_config'):
-            if not get_opt(self.options, 'vt_monitor'):
+            if not get_opt(self.options, 'vt_qemu_monitor'):
                 pass
-            elif get_opt(self.options, 'vt_monitor') == 'qmp':
+            elif get_opt(self.options, 'vt_qemu_monitor') == 'qmp':
                 self.cartesian_parser.assign("monitor_type", "qmp")
-            elif get_opt(self.options, 'vt_monitor') == 'human':
+            elif get_opt(self.options, 'vt_qemu_monitor') == 'human':
                 self.cartesian_parser.assign("monitor_type", "human")
         else:
             logging.info("Config provided, ignoring monitor setting")
@@ -207,18 +207,18 @@ class VirtTestOptionsProcess(object):
     def _process_smp(self):
         smp_setting = 'config vt.qemu.smp'
         if not get_opt(self.options, 'vt_config'):
-            if get_opt(self.options, 'vt_smp') == '1':
+            if get_opt(self.options, 'vt_qemu_smp') == '1':
                 self.cartesian_parser.only_filter("up")
-            elif get_opt(self.options, 'vt_smp') == '2':
+            elif get_opt(self.options, 'vt_qemu_smp') == '2':
                 self.cartesian_parser.only_filter("smp2")
             else:
                 try:
                     self.cartesian_parser.only_filter("up")
                     self.cartesian_parser.assign(
-                        "smp", int(get_opt(self.options, 'vt_smp')))
+                        "smp", int(get_opt(self.options, 'vt_qemu_smp')))
                 except ValueError:
                     raise ValueError("Invalid %s '%s'. Valid value: (1, 2, "
-                                     "or integer)" % get_opt(self.options, 'vt_smp'))
+                                     "or integer)" % get_opt(self.options, 'vt_qemu_smp'))
         else:
             logging.info("Config provided, ignoring %s", smp_setting)
 
@@ -250,37 +250,37 @@ class VirtTestOptionsProcess(object):
     def _process_image_type(self):
         image_type_setting = 'config vt.qemu.image_type'
         if not get_opt(self.options, 'vt_config'):
-            if get_opt(self.options, 'vt_image_type') in SUPPORTED_IMAGE_TYPES:
-                self.cartesian_parser.only_filter(get_opt(self.options, 'vt_image_type'))
+            if get_opt(self.options, 'vt_qemu_image_type') in SUPPORTED_IMAGE_TYPES:
+                self.cartesian_parser.only_filter(get_opt(self.options, 'vt_qemu_image_type'))
             else:
                 self.cartesian_parser.only_filter("raw")
                 # The actual param name is image_format.
                 self.cartesian_parser.assign("image_format",
-                                             get_opt(self.options, 'vt_image_type'))
+                                             get_opt(self.options, 'vt_qemu_image_type'))
         else:
             logging.info("Config provided, ignoring %s", image_type_setting)
 
     def _process_nic_model(self):
         nic_model_setting = 'config vt.qemu.nic_model'
         if not get_opt(self.options, 'vt_config'):
-            if get_opt(self.options, 'vt_nic_model') in SUPPORTED_NIC_MODELS:
-                self.cartesian_parser.only_filter(get_opt(self.options, 'vt_nic_model'))
+            if get_opt(self.options, 'vt_qemu_nic_model') in SUPPORTED_NIC_MODELS:
+                self.cartesian_parser.only_filter(get_opt(self.options, 'vt_qemu_nic_model'))
             else:
                 self.cartesian_parser.only_filter("nic_custom")
                 self.cartesian_parser.assign(
-                    "nic_model", get_opt(self.options, 'vt_nic_model'))
+                    "nic_model", get_opt(self.options, 'vt_qemu_nic_model'))
         else:
             logging.info("Config provided, ignoring %s", nic_model_setting)
 
     def _process_disk_buses(self):
         disk_bus_setting = 'config vt.qemu.disk_bus'
         if not get_opt(self.options, 'vt_config'):
-            if get_opt(self.options, 'vt_disk_bus') in SUPPORTED_DISK_BUSES:
-                self.cartesian_parser.only_filter(get_opt(self.options, 'vt_disk_bus'))
+            if get_opt(self.options, 'vt_qemu_disk_bus') in SUPPORTED_DISK_BUSES:
+                self.cartesian_parser.only_filter(get_opt(self.options, 'vt_qemu_disk_bus'))
             else:
                 raise ValueError("Invalid %s '%s'. Valid values: %s" %
                                  (disk_bus_setting,
-                                  get_opt(self.options, 'vt_disk_bus'),
+                                  get_opt(self.options, 'vt_qemu_disk_bus'),
                                   SUPPORTED_DISK_BUSES))
         else:
             logging.info("Config provided, ignoring %s", disk_bus_setting)
@@ -289,7 +289,7 @@ class VirtTestOptionsProcess(object):
         nettype_setting = 'config vt.qemu.nettype'
         vhost_setting = 'config vt.qemu.vhost'
         if not get_opt(self.options, 'vt_config'):
-            if get_opt(self.options, 'vt_nettype') == "bridge":
+            if get_opt(self.options, 'vt_common_nettype') == "bridge":
                 if get_opt(self.options, 'vt_vhost') == "on":
                     self.cartesian_parser.assign("vhost", "on")
                 elif get_opt(self.options, 'vt_vhost') == "force":
@@ -300,7 +300,7 @@ class VirtTestOptionsProcess(object):
                 if get_opt(self.options, 'vt_vhost') in ["on", "force"]:
                     raise ValueError("%s '%s' is incompatible with %s '%s'"
                                      % (nettype_setting,
-                                        get_opt(self.options, 'vt_nettype'),
+                                        get_opt(self.options, 'vt_common_nettype'),
                                         vhost_setting,
                                         get_opt(self.options, 'vt_vhost')))
         else:
@@ -324,7 +324,7 @@ class VirtTestOptionsProcess(object):
 
     def _process_malloc_perturb(self):
         self.cartesian_parser.assign("malloc_perturb",
-                                     get_opt(self.options, 'vt_malloc_perturb'))
+                                     get_opt(self.options, 'vt_qemu_malloc_perturb'))
 
     def _process_qemu_specific_options(self):
         """
@@ -390,21 +390,21 @@ class VirtTestOptionsProcess(object):
 
     def _process_restart_vm(self):
         if not get_opt(self.options, 'vt_config'):
-            if not get_opt(self.options, 'vt_keep_guest_running'):
+            if not get_opt(self.options, 'vt_setup_keep_guest_running'):
                 self.cartesian_parser.assign("kill_vm", "yes")
 
     def _process_restore_image(self):
         if not get_opt(self.options, 'vt_config'):
-            if get_opt(self.options, 'vt_backup_image_before_test'):
+            if get_opt(self.options, 'vt_setup_backup_image_before_test'):
                 self.cartesian_parser.assign("backup_image_before_testing",
                                              "yes")
-            if get_opt(self.options, 'vt_restore_image_after_test'):
+            if get_opt(self.options, 'vt_setup_restore_image_after_test'):
                 self.cartesian_parser.assign("restore_image_after_testing",
                                              "yes")
 
     def _process_mem(self):
         if not get_opt(self.options, 'vt_config'):
-            mem = get_opt(self.options, 'vt_mem')
+            mem = get_opt(self.options, 'vt_common_mem')
             if mem is not None:
                 self.cartesian_parser.assign("mem", mem)
 
