@@ -90,11 +90,11 @@ class VirtTestOptionsProcess(object):
         set_opt_from_settings(self.options, 'vt_qemu_smp',
                               2, default='2')
         set_opt_from_settings(self.options, 'vt_qemu_image_type',
-                              2, default='qcow2')
+                              2, default=SUPPORTED_IMAGE_TYPES[0])
         set_opt_from_settings(self.options, 'vt_qemu_nic_model',
-                              2, default='virtio_net')
+                              2, default=SUPPORTED_NIC_MODELS[0])
         set_opt_from_settings(self.options, 'vt_qemu_disk_bus',
-                              2, default='virtio_blk')
+                              2, default=SUPPORTED_DISK_BUSES[0])
         set_opt_from_settings(self.options, 'vt_qemu_sandbox',
                               2, default='on')
         set_opt_from_settings(self.options, 'vt_qemu_defconfig',
