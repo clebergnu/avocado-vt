@@ -46,11 +46,7 @@ class VirtTestOptionsProcess(object):
         """
         Parses options and initializes attributes.
         """
-        # Compatibility with nrunner Avocado
-        if isinstance(options, dict):
-            self.options = argparse.Namespace(**options)
-        else:
-            self.options = options
+        self.options = options
         # There are a few options from the original virt-test runner
         # that don't quite make sense for avocado (avocado implements a
         # better version of the virt-test feature).
