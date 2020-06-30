@@ -15,6 +15,8 @@ from avocado.core.settings import settings
 from avocado.utils import distro
 from avocado.utils import path as utils_path
 
+from virttest.compat import get_settings_value
+
 from six.moves import xrange
 
 if hasattr(sys, 'real_prefix'):
@@ -209,7 +211,7 @@ def get_tmp_dir(public=True):
 
     :param public: If public for all users' access
     """
-    persistent_dir = settings.get_value('vt.common', 'tmp_dir',
+    persistent_dir = get_settings_value('vt.common', 'tmp_dir',
                                         default="")
     if persistent_dir != "":
         return persistent_dir
