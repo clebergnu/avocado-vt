@@ -26,6 +26,7 @@ from avocado.utils import path as utils_path
 from virttest import data_dir
 from virttest import defaults
 from virttest import standalone_test
+from virttest.compat import get_settings_value
 from virttest.standalone_test import SUPPORTED_TEST_TYPES
 from virttest.standalone_test import SUPPORTED_LIBVIRT_URIS
 from virttest.standalone_test import SUPPORTED_NET_TYPES
@@ -55,11 +56,11 @@ def add_basic_vt_options(parser):
            ", ".join(SUPPORTED_TEST_TYPES))
     parser.add_argument("--vt-type", action="store", dest="vt.type",
                         help=msg, default='qemu')
-    arch = settings.get_value('vt.common', 'arch', default=None)
+    arch = get_settings_value('vt.common', 'arch', default=None)
     parser.add_argument("--vt-arch", help="Choose the VM architecture. "
                         "Default: %(default)s", default=arch,
                         dest='vt.common.arch')
-    machine = settings.get_value('vt.common', 'machine_type',
+    machine = get_settings_value('vt.common', 'machine_type',
                                  default=defaults.DEFAULT_MACHINE_TYPE)
     parser.add_argument("--vt-machine-type", help="Choose the VM machine type."
                         " Default: %(default)s", default=machine,
@@ -103,7 +104,7 @@ def add_qemu_bin_vt_option(parser):
         qemu_bin_path = standalone_test.find_default_qemu_paths()[0]
     except (RuntimeError, utils_path.CmdNotFoundError):
         qemu_bin_path = None
-    qemu_bin = settings.get_value('vt.qemu', 'qemu_bin',
+    qemu_bin = get_settings_value('vt.qemu', 'qemu_bin',
                                   default=None)
     if qemu_bin is None:    # Allow default to be None when not set in setting
         default_qemu_bin = None
@@ -116,10 +117,10 @@ def add_qemu_bin_vt_option(parser):
                         " this flag is omitted, no attempt to set the qemu "
                         "binaries will be made. Current: %s"
                         % _str_or_none(qemu_bin))
-    qemu_dst = settings.get_value('vt.qemu', 'qemu_dst_bin',
+    qemu_dst = get_settings_value('vt.qemu', 'qemu_dst_bin',
                                   default=qemu_bin_path)
-    parser.add_argument("--vt-qemu-dst-bin", action="store", default=qemu_dst,
-                        dest="vt.qemu.qemu_dst_bin", help="Path "
+    parser.add_argument("--vt-qemu-dst-bin", action="store",
+                        dest="vt.qemu.qemu_dst_bin", default=qemu_dst, help="Path "
                         "to a custom qemu binary to be tested for the "
                         "destination of a migration, overrides --vt-qemu-bin. "
                         "If --vt-config is provided and this flag is omitted, "
@@ -161,7 +162,7 @@ class VTRun(CLI):
         supported_uris = ", ".join(SUPPORTED_LIBVIRT_URIS)
         msg = ("Choose test connect uri for libvirt (E.g: %s). "
                "Current: %%(default)s" % supported_uris)
-        uri_current = settings.get_value('vt.libvirt', 'connect_uri',
+        uri_current = get_settings_value('vt.libvirt', 'connect_uri',
                                          default=None)
         vt_compat_group_libvirt.add_argument("--vt-connect-uri",
                                              action="store",
