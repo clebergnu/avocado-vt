@@ -144,10 +144,6 @@ class VTRun(CLI):
         if run_subcommand_parser is None:
             return
 
-        qemu_nw_msg = "QEMU network option (%s). " % ", ".join(
-            SUPPORTED_NET_TYPES)
-        qemu_nw_msg += "Default: user"
-
         vt_compat_group_common = run_subcommand_parser.add_argument_group(
             'Virt-Test compat layer - Common options')
         vt_compat_group_qemu = run_subcommand_parser.add_argument_group(
