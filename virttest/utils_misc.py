@@ -1592,8 +1592,10 @@ class NumaInfo(object):
         self.online_nodes_withcpu = self.get_online_nodes_withcpu()
         self.online_nodes_withcpumem = list(set(self.online_nodes_withcpu) &
                                             set(self.online_nodes_withmem))
+        self.online_nodes_meminfo = self.get_all_node_meminfo()
         self.nodes = {}
         self.distances = {}
+        self.online_nodes_cpus = self.get_all_node_cpus()
 
         # ensure numactl package is available
         if not utils_package.package_install('numactl', session=self.session):
@@ -1698,6 +1700,19 @@ class NumaInfo(object):
         :rtype: string
         """
         return self.get_all_node_meminfo()[node_id][key]
+
+    def get_all_node_cpus(self):
+        """
+        Get the cpus of all online nodes.
+
+        :return: All nodes' cpus
+        :rtype: Dict
+        """
+        cpus = {}
+        node = NumaNode(session=self.session)
+        for node_id in self.get_online_nodes():
+            cpus[node_id] = node.get_node_cpus(node_id)
+        return cpus
 
     def get_online_nodes_withmem(self):
         """
