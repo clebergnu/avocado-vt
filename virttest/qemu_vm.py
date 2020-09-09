@@ -2290,6 +2290,8 @@ class VM(virt_vm.BaseVM):
         disable_kvm_option = ""
         if (devices.has_option("no-kvm")):
             disable_kvm_option = "-no-kvm"
+        elif (devices.has_option("accel")):
+            disable_kvm_option = "-accel tcg"
 
         enable_kvm_option = ""
         if (devices.has_option("enable-kvm")):
