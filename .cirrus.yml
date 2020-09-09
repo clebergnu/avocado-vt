@@ -18,4 +18,4 @@ fedora_30_task:
   list_script: &list_scr
     - $PYTHON -m avocado list --vt-type=$VT_TYPE
   run_script: &dry_run_scr
-    - $PYTHON -m avocado --show all run --vt-type=$VT_TYPE --vt-extra-params 'enable_kvm=no' 'nettype=user' 'pre_command_noncritical=yes' -- io-github-autotest-qemu.boot type_specific.io-github-autotest-qemu.migrate.default.tcp.default
+    - $PYTHON -m avocado --show all run --vt-type=$VT_TYPE --vt-extra-params 'enable_kvm=no' 'nettype=user' 'pre_command_noncritical=yes' -- io-github-autotest-qemu.boot io-github-autotest-qemu.reboot
