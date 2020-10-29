@@ -10,6 +10,8 @@ import glob
 import shutil
 import stat
 
+import pkg_resources
+
 from avocado.core import data_dir
 from avocado.utils import distro
 from avocado.utils import path as utils_path
@@ -33,13 +35,13 @@ else:
     _ROOT_PATH = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
 
 ROOT_DIR = os.path.abspath(_ROOT_PATH)
-BASE_BACKEND_DIR = os.path.join(ROOT_DIR, 'backends')
+BASE_BACKEND_DIR = pkg_resources.resource_filename('virttest', 'backends')
 DATA_DIR = os.path.join(data_dir.get_data_dir(), 'avocado-vt')
-SHARED_DIR = os.path.join(ROOT_DIR, 'shared')
+SHARED_DIR = pkg_resources.resource_filename('virttest', 'shared')
 DEPS_DIR = os.path.join(ROOT_DIR, 'shared', 'deps')
 BASE_DOWNLOAD_DIR = os.path.join(SHARED_DIR, 'downloads')
 DOWNLOAD_DIR = os.path.join(DATA_DIR, 'downloads')
-TEST_PROVIDERS_DIR = os.path.join(ROOT_DIR, 'test-providers.d')
+TEST_PROVIDERS_DIR = pkg_resources.resource_filename('virttest', 'test-providers.d')
 BACKING_DATA_DIR = None
 
 
