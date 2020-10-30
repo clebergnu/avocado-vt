@@ -20,28 +20,14 @@ from virttest.compat import get_settings_value
 
 from six.moves import xrange
 
-if hasattr(sys, 'real_prefix'):
-    # unlike default execution venv prefix does not contain /usr
-    _DEFAULT_SHARED_PATH = os.path.join(sys.prefix, "shared")
-else:
-    _DEFAULT_SHARED_PATH = os.path.join(sys.prefix, "share",
-                                        "avocado-plugins-vt",
-                                        "shared")
-
-if (os.path.isdir(_DEFAULT_SHARED_PATH) and
-        len(os.listdir(_DEFAULT_SHARED_PATH)) > 0):
-    _ROOT_PATH = os.path.dirname(_DEFAULT_SHARED_PATH)
-else:
-    _ROOT_PATH = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
-
-ROOT_DIR = os.path.abspath(_ROOT_PATH)
 BASE_BACKEND_DIR = pkg_resources.resource_filename('virttest', 'backends')
-DATA_DIR = os.path.join(data_dir.get_data_dir(), 'avocado-vt')
-SHARED_DIR = pkg_resources.resource_filename('virttest', 'shared')
-DEPS_DIR = os.path.join(ROOT_DIR, 'shared', 'deps')
-BASE_DOWNLOAD_DIR = os.path.join(SHARED_DIR, 'downloads')
-DOWNLOAD_DIR = os.path.join(DATA_DIR, 'downloads')
 TEST_PROVIDERS_DIR = pkg_resources.resource_filename('virttest', 'test-providers.d')
+SHARED_DIR = pkg_resources.resource_filename('virttest', 'shared')
+DEPS_DIR = os.path.join(SHARED_DIR, 'deps')
+BASE_DOWNLOAD_DIR = os.path.join(SHARED_DIR, 'downloads')
+
+DATA_DIR = os.path.join(data_dir.get_data_dir(), 'avocado-vt')
+DOWNLOAD_DIR = os.path.join(DATA_DIR, 'downloads')
 BACKING_DATA_DIR = None
 
 
@@ -130,7 +116,7 @@ BACKING_DATA_DIR = get_backing_data_dir()
 
 
 def get_root_dir():
-    return ROOT_DIR
+    return os.path.dirname(BASE_BACKEND_DIR)
 
 
 def get_data_dir():
@@ -273,7 +259,6 @@ def clean_tmp_files():
 
 
 if __name__ == '__main__':
-    print("root dir:         " + ROOT_DIR)
     print("tmp dir:          " + get_tmp_dir())
     print("data dir:         " + DATA_DIR)
     print("deps dir:         " + DEPS_DIR)
