@@ -1425,6 +1425,13 @@ class Parser(object):
         self.node.filename = StrReader("").filename
         self.node = self._parse(Lexer(StrReader(s)), self.node)
 
+    @staticmethod
+    def get_only_filter_statement(variant):
+        """
+        Returns a string filtering for only a given variant
+        """
+        return "only %s" % variant
+
     def only_filter(self, variant):
         """
         Apply a only filter programatically and keep track of it.
@@ -1433,9 +1440,16 @@ class Parser(object):
 
         :param variant: String with the variant name.
         """
-        string = "only %s" % variant
-        self.only_filters.append(string)
-        self.parse_string(string)
+        statement = self.get_only_filter_statement(variant)
+        self.only_filters.append(statement)
+        self.parse_string(statement)
+
+    @staticmethod
+    def get_no_filter_statement(variant):
+        """
+        Returns a string filtering for only a given variant
+        """
+        return "only %s" % variant
 
     def no_filter(self, variant):
         """
@@ -1445,9 +1459,16 @@ class Parser(object):
 
         :param variant: String with the variant name.
         """
-        string = "no %s" % variant
-        self.no_filters.append(string)
-        self.parse_string(string)
+        statement = self.get_no_filter_statement(variant)
+        self.no_filters.append(statement)
+        self.parse_string(statement)
+
+    @staticmethod
+    def get_assign_statement(key, value):
+        """
+        Returns a string with an assigment.
+        """
+        return "%s = %s" % (key, value)
 
     def assign(self, key, value):
         """
@@ -1457,9 +1478,9 @@ class Parser(object):
 
         :param variant: String with the variant name.
         """
-        string = "%s = %s" % (key, value)
-        self.assignments.append(string)
-        self.parse_string(string)
+        statement = self.get_assign_statement(key, value)
+        self.assignments.append(statement)
+        self.parse_string(statement)
 
     def _parse(self, lexer, node=None, prev_indent=-1):
         if not node:
