@@ -70,6 +70,9 @@ if __name__ == "__main__":
               'avocado.plugins.init': [
                   'vt-init = avocado_vt.plugins.vt_init:VtInit',
                   ],
+              'avocado.plugins.resolver': [
+                  'vt = avocado_vt.plugins.vt_resolver:VTResolver'
+                  ],
               },
           install_requires=requirements,
           )
